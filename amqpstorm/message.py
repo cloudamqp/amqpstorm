@@ -10,7 +10,23 @@ from amqpstorm.exception import AMQPMessageError
 
 
 class Message(BaseMessage):
-    """RabbitMQ Message object."""
+    """RabbitMQ Message
+
+    Usage:
+    ::
+        # Message Properties.
+        properties = {
+            'content_type': 'text/plain',
+            'expiration': '3600',
+            'headers': {'key': 'value'},
+        }
+
+        # Create a new message.
+        message = Message.create(channel, 'Hello RabbitMQ!', properties)
+
+        # Publish the message to a queue called, 'my_queue'.
+        message.publish('my_queue')
+    """
     __slots__ = [
         '_auto_decode', '_decode_cache'
     ]

@@ -66,7 +66,17 @@ AMQP_ERROR_MAPPING = {
 
 
 class AMQPError(IOError):
-    """General AMQP Error"""
+    """General AMQP Error
+
+    Exceptions raised by AMQPStorm are mapped based to the
+    AMQP 0.9.1 specifications (when applicable).
+
+    Usage:
+    ::
+        except AMQPChannelError as why:
+            if why.error_code == 312:
+                self.channel.queue.declare(queue_name)
+    """
     _documentation = None
     _error_code = None
     _error_type = None

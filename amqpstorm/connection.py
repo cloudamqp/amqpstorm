@@ -28,7 +28,31 @@ DEFAULT_VIRTUAL_HOST = '/'
 
 
 class Connection(Stateful):
-    """RabbitMQ Connection."""
+    """Create a new RabbitMQ Connection.
+
+    Usage:
+    ::
+        import amqpstorm
+
+        connection = amqpstorm.Connection('localhost', 'guest', 'guest')
+
+
+    Using a SSL Context:
+    ::
+        import ssl
+
+        import amqpstorm
+
+        ssl_options = {
+            'context': ssl.create_default_context(cafile='cacert.pem'),
+            'server_hostname': 'rmq.eandersson.net'
+        }
+
+        connection = amqpstorm.Connection(
+            'rmq.eandersson.net', 'guest', 'guest', port=5671,
+             ssl=True, ssl_options=ssl_options
+        )
+    """
     __slots__ = [
         'heartbeat', 'parameters', '_channel0', '_channels', '_io'
     ]
@@ -143,7 +167,7 @@ class Connection(Stateful):
         return self._io.socket
 
     def channel(self, rpc_timeout=60, lazy=False):
-        """Open Channel.
+        """Open a Channel.
 
         :param int rpc_timeout: Timeout before we give up waiting for an RPC
                                 response from the server.
@@ -186,7 +210,7 @@ class Connection(Stateful):
         raise self.exceptions[0]
 
     def close(self):
-        """Close connection.
+        """Close Connection.
 
         :raises AMQPConnectionError: Raises if the connection
                                      encountered an error.
@@ -263,6 +287,7 @@ class Connection(Stateful):
 
     def _get_next_available_channel_id(self):
         """Returns the next available available channel id.
+
         :raises AMQPConnectionError: Raises if there is no available channel.
         :rtype: int
         """

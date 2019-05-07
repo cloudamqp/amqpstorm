@@ -17,6 +17,24 @@ API_TOP = 'top/%s'
 
 
 class ManagementApi(object):
+    """RabbitMQ Management Api
+
+    Usage:
+    ::
+        from amqpstorm.management import ManagementApi
+
+        api = ManagementApi('http://localhost:15672', 'guest', 'guest')
+
+        api.user.create('my_user', 'password')
+        api.user.set_permission(
+            'my_user',
+            virtual_host='/',
+            configure_regex='.*',
+            write_regex='.*',
+            read_regex='.*'
+        )
+    """
+
     def __init__(self, api_url, username, password, timeout=10,
                  verify=None, cert=None):
         self.http_client = HTTPClient(
@@ -36,6 +54,10 @@ class ManagementApi(object):
     def basic(self):
         """RabbitMQ Basic Operations.
 
+            e.g.
+            ::
+                api.basic.publish('Hello RabbitMQ', routing_key='my_queue')
+
         :rtype: amqpstorm.management.basic.Basic
         """
         return self._basic
@@ -43,6 +65,10 @@ class ManagementApi(object):
     @property
     def channel(self):
         """RabbitMQ Channel Operations.
+
+            e.g.
+            ::
+                api.channel.list()
 
         :rtype: amqpstorm.management.channel.Channel
         """
@@ -52,6 +78,10 @@ class ManagementApi(object):
     def connection(self):
         """RabbitMQ Connection Operations.
 
+            e.g.
+            ::
+                api.connection.list()
+
         :rtype: amqpstorm.management.connection.Connection
         """
         return self._connection
@@ -59,6 +89,10 @@ class ManagementApi(object):
     @property
     def exchange(self):
         """RabbitMQ Exchange Operations.
+
+            e.g.
+            ::
+                api.exchange.declare('my_exchange')
 
         :rtype: amqpstorm.management.exchange.Exchange
         """
@@ -68,6 +102,10 @@ class ManagementApi(object):
     def healthchecks(self):
         """RabbitMQ Healthchecks.
 
+            e.g.
+            ::
+                api.healthchecks.get()
+
         :rtype: amqpstorm.management.healthchecks.Healthchecks
         """
         return self._healthchecks
@@ -75,6 +113,10 @@ class ManagementApi(object):
     @property
     def queue(self):
         """RabbitMQ Queue Operations.
+
+            e.g.
+            ::
+                api.queue.declare('my_queue', virtual_host='/')
 
         :rtype: amqpstorm.management.queue.Queue
         """
@@ -84,6 +126,10 @@ class ManagementApi(object):
     def user(self):
         """RabbitMQ User Operations.
 
+            e.g.
+            ::
+                api.user.create('my_user', 'password')
+
         :rtype: amqpstorm.management.user.User
         """
         return self._user
@@ -92,12 +138,28 @@ class ManagementApi(object):
     def virtual_host(self):
         """RabbitMQ VirtualHost Operations.
 
+            e.g.
+            ::
+                api.virtual_host.create('my_virtual_host')
+
         :rtype: amqpstorm.management.virtual_host.VirtualHost
         """
         return self._virtual_host
 
     def aliveness_test(self, virtual_host='/'):
         """Aliveness Test.
+
+        Usage:
+        ::
+            from amqpstorm.management import ManagementApi
+
+            api = ManagementApi('http://localhost:15672', 'guest', 'guest')
+
+            result = api.aliveness_test('/')
+            if result['status'] == 'ok':
+                print("RabbitMQ is alive!")
+            else:
+                print("RabbitMQ is not alive! :(")
 
         :param str virtual_host: Virtual host name
 

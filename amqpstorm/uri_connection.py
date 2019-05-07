@@ -15,13 +15,15 @@ LOGGER = logging.getLogger(__name__)
 
 
 class UriConnection(Connection):
-    """Create a new Connection instance using an AMQP Uri string.
+    """Create a new RabbitMQ Connection instance using a Uri.
 
-        Usage:
+    Usage:
+    ::
+        import amqpstorm
 
-            UriConnect('amqp://guest:guest@localhost:5672/%2F?heartbeat=60')
-
-            UriConnect('amqps://guest:guest@localhost:5671/%2F?heartbeat=60')
+        connection = amqpstorm.UriConnection(
+            'amqp://guest:guest@localhost:5672/%2F?heartbeat=60'
+        )
     """
     __slots__ = []
 

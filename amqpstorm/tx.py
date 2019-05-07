@@ -38,18 +38,6 @@ class Tx(Handler):
         if self._tx_active:
             self.commit()
 
-    def select(self):
-        """Enable standard transaction mode.
-
-            This will enable transaction mode on the channel. Meaning that
-            messages will be kept in the remote server buffer until such a
-            time that either commit or rollback is called.
-
-        :return:
-        """
-        self._tx_active = True
-        return self._channel.rpc_request(specification.Tx.Select())
-
     def commit(self):
         """Commit the current transaction.
 
@@ -80,3 +68,15 @@ class Tx(Handler):
         """
         self._tx_active = False
         return self._channel.rpc_request(specification.Tx.Rollback())
+
+    def select(self):
+        """Enable standard transaction mode.
+
+            This will enable transaction mode on the channel. Meaning that
+            messages will be kept in the remote server buffer until such a
+            time that either commit or rollback is called.
+
+        :return:
+        """
+        self._tx_active = True
+        return self._channel.rpc_request(specification.Tx.Select())
