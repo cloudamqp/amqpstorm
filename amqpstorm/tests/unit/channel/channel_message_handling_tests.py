@@ -127,7 +127,7 @@ class ChannelBuildMessageTests(TestFramework):
         channel._inbound = []
 
         def add_inbound():
-            channel._inbound.append(ContentBody())
+            channel._inbound.append(ContentBody(None))
 
         threading.Timer(function=add_inbound, interval=0.1).start()
 
